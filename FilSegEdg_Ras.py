@@ -25,14 +25,15 @@ def filters(path):
     img6 = im.filter(ImageFilter.MaxFilter)
     img7= cv.bilateralFilter(img1,9,75,75)
     
-    title=['Original','Averaging - 3x3','Averaging - 25x25',' median 25',' gaussian','max','bilateral']
-    plt.figure().set_size_inches(25,25)
+    title=['Original','Averaging - 3x3','Averaging - 25x25',' median 25',' gaussian','max','bilateral']  
+    images = [img1,img2,img3,img4,img5,img6,img7]
     
-    for i,j,title in zip(range(8),range(1,8), title): 
-        plt.subplot(f'33{j}'),plt.imshow(f'img{i}'),plt.title(title)   
+    plt.figure().set_size_inches(25,25)
+    for img,j,title in zip(images,range(1,8), title): 
+        plt.subplot(int(f'33{j}')),plt.imshow(img),plt.title(title)   
         # instead of storing all the images in an array (waste of memory) and then browse that array,
         # I named the images in a way i can browse them
-    plt.imshow()    
+    plt.show()    
     plt.savefig('NoiseElimination')
 
 
@@ -71,7 +72,7 @@ def segmentation(path) :
     Kmeans_seg = img1_32[k_means.labels_]
     Kmeans_seg = Kmeans_seg.reshape(grayim.shape)
 
-            # 2- With Hierarchical based on Kmeans
+    # 2- With Hierarchical based on Kmeans
     k_means = KM(n_clusters=100).fit(img1) 
     nb_clusts = k_means.n_clusters 
     centroids_after_kmeans = k_means.cluster_centers_
@@ -109,8 +110,8 @@ def segmentation(path) :
     
     plt.figure().set_size_inches(25,25)
     for i,img,title in zip(range(1,10),images, title):
-        plt.subplot(f'33{i}'),plt.imshow(img),plt.title(title)
-    plt.imshow()
+        plt.subplot(int(f'33{i}')),plt.imshow(img),plt.title(title)
+    plt.show()
     plt.savefig('Segmentation.png')
     
     
@@ -148,15 +149,15 @@ def edge(path):
     scharr_Y_abs = np.uint8(np.absolute(scharr_Y)) 
     scharr= cv.bitwise_or(scharr_Y_abs,scharr_X_abs) 
     
-    title=['Sobel','Canny','Prewitt','Laplacien','Scharr']
-    images=[amp_sobel,edge,prewitt,lap,scharr]
+    title=['Original','Sobel','Canny','Prewitt','Laplacien','Scharr']
+    images=[grayim,amp_sobel,edge,prewitt,lap,scharr]
 
     plt.figure().set_size_inches(25,25)
-    for i,img, title in zip(range(1,6), images, title) :
-        plt.subplot(f'23{i}'),plt.imshow(img,cmap=plt.cm.gray),plt.title()
-    plt.imshow()
+    for i,img, title in zip(range(1,7), images, title) :
+        plt.subplot(int(f'23{i}')),plt.imshow(img, cmap='gray'),plt.title(title)
+    plt.show()
     plt.savefig('EdgeDetection.png')
     
-# segmentation("image/1.jpg")
+segmentation("image/1.jpg")
 filters("image/1.jpg")
-# edge("image/1.jpg")
+edge("image/1.jpg")
